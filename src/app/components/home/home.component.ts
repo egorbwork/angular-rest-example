@@ -3,9 +3,9 @@ import {
   OnInit
 } from '@angular/core';
 
-import { AppState } from '../app.service';
-import { Title } from './title';
-import { XLargeDirective } from './x-large';
+import { AppState } from '../../app.service';
+import { Title } from './title/index';
+import { XLargeDirective } from './x-large/index';
 
 @Component({
   /**

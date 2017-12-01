@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { ApiError } from '../../models/api-error';
+import { PaginatorInterface, Product, ProductInterface } from '../../models';
 import { ProductCustomRestClient } from '../../services/rest/product-custom-rest.client';
-import {PaginatorInterface, PartialProductInterface, ProductInterface} from '../../models';
 
 @Component({
     selector: 'product-list',
@@ -29,13 +31,20 @@ export class ProductListComponent implements OnInit {
     }
 
     public partialUpdate(product: ProductInterface): void {
-        this.productCustomRestClient.put(product).subscribe(
+        let productEntity = new Product(product);
+        this.areProductsLoading = true;
+        this.productCustomRestClient.put(productEntity).subscribe(
             (productItem: ProductInterface) => {
                 let element = this.products.find((item) => item._id === productItem._id);
                 element.description = productItem.description;
                 element.name = productItem.name;
                 element.price = productItem.price;
-            }
+            },
+            (error: ApiError) => {
+                this.areProductsLoading = false;
+                alert(error.error);
+            },
+            () => this.areProductsLoading = false
         );
     }
 }

@@ -1,0 +1,21 @@
+<h3 class="first">Products</h3>
+<p-dataTable [value]="products" [loading]="areProductsLoading" editable="true" (onEditComplete)="partialUpdate($event.data)">
+    <p-column header="Nr.">
+        <ng-template let-item="rowData" let-index="rowIndex" pTemplate="body">
+            <span> {{ index+1 }} </span>
+        </ng-template>
+    </p-column>
+    <p-column
+            field="name"
+            header="Name"
+            editable="true"
+            sortable="true">
+    </p-column>
+    <p-column field="description" header="Description" editable="true" sortable="true"></p-column>
+    <p-column field="price" header="Price" editable="true" sortable="true"></p-column>
+    <p-column header="Actions">
+        <ng-template let-item="rowData" pTemplate="body">
+            <button type="button" (click)="edit(item)"> Edit </button>
+        </ng-template>
+    </p-column>
+</p-dataTable>

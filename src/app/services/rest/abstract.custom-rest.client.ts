@@ -1,13 +1,12 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 
-import { ApiError } from '../../models/api-error';
 import { AuthenticationManager } from '../authentication/authentication.manager';
 import { environment } from '../../../environments/environment';
-import { EntityInterface, PaginatorInterface } from '../../models';
+import { ApiError, EntityInterface, PaginatorInterface } from '../../models';
 
 @Injectable()
 export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
@@ -30,7 +29,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
                     (responseEntity: PaginatorInterface<Entity>) => {
                         subscriber.next(responseEntity);
                     },
-                    (errorResponse: Response) => {
+                    (errorResponse: HttpErrorResponse) => {
                         let error = this.processError(errorResponse);
                         return subscriber.error(error);
                     },
@@ -51,7 +50,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
                     (responseEntity: Entity) => {
                         subscriber.next(responseEntity);
                     },
-                    (errorResponse: Response) => {
+                    (errorResponse: HttpErrorResponse) => {
                         let error = this.processError(errorResponse);
                         return subscriber.error(error);
                     },
@@ -61,7 +60,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
         );
     }
 
-    public post(entity: Entity) {
+    public create(entity: Entity): Observable<Entity> {
         let requestObservable =  this.httpClient.post<Entity>(
             this.getUrl(),
             entity,
@@ -73,7 +72,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
                     (responseEntity: Entity) => {
                         subscriber.next(responseEntity);
                     },
-                    (errorResponse: Response) => {
+                    (errorResponse: HttpErrorResponse) => {
                         let error = this.processError(errorResponse);
                         return subscriber.error(error);
                     },
@@ -83,7 +82,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
         );
     }
 
-    public put(entity: Entity) {
+    public update(entity: Entity): Observable<Entity> {
         let requestObservable =  this.httpClient.put<Entity>(
             this.getUrl() + '/' + entity._id,
             entity,
@@ -95,7 +94,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
                     (responseEntity: Entity) => {
                         subscriber.next(responseEntity);
                     },
-                    (errorResponse: Response) => {
+                    (errorResponse: HttpErrorResponse) => {
                         let error = this.processError(errorResponse);
                         return subscriber.error(error);
                     },
@@ -105,7 +104,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
         );
     }
 
-    public patch(entity: PartialEntity) {
+    public patch(entity: PartialEntity): Observable<Entity> {
         let requestObservable = this.httpClient.patch<Entity>(
             this.getUrl() + '/' + entity._id,
             entity,
@@ -117,7 +116,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
                     (responseEntity: Entity) => {
                         subscriber.next(responseEntity);
                     },
-                    (errorResponse: Response) => {
+                    (errorResponse: HttpErrorResponse) => {
                         let error = this.processError(errorResponse);
                         return subscriber.error(error);
                     },
@@ -127,7 +126,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
         );
     }
 
-    public delete(id: string) {
+    public remove(id: string): Observable<Entity> {
         let requestObservable = this.httpClient.delete<{message: string}>(
             this.getUrl() + '/' + id,
             {headers: this.getHeaders()}
@@ -138,7 +137,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
                     (responseEntity: {message: string}) => {
                         subscriber.next(responseEntity);
                     },
-                    (errorResponse: Response) => {
+                    (errorResponse: HttpErrorResponse) => {
                         let error = this.processError(errorResponse);
                         return subscriber.error(error);
                     },
@@ -148,7 +147,8 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
         );
     }
 
-    protected processError(errorResponse: any): ApiError {
+    protected processError(errorResponse: HttpErrorResponse): ApiError {
+        console.log(errorResponse);
         if (errorResponse.error) {
             return errorResponse.error;
         } else {

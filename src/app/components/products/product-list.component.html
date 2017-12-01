@@ -1,5 +1,5 @@
 <h3 class="first">Products</h3>
-<p-dataTable [value]="products" [loading]="areProductsLoading" editable="true" (onEditComplete)="partialUpdate($event.data)">
+<p-dataTable [value]="products" [loading]="areProductsLoading" editable="true" (onEditComplete)="update($event.data)">
     <p-column header="Nr.">
         <ng-template let-item="rowData" let-index="rowIndex" pTemplate="body">
             <span> {{ index+1 }} </span>

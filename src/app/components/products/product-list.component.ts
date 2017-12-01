@@ -30,7 +30,7 @@ export class ProductListComponent implements OnInit {
         console.log(product);
     }
 
-    public partialUpdate(product: ProductInterface): void {
+    public update(product: ProductInterface): void {
         let productEntity = new Product(product);
         this.areProductsLoading = true;
         this.productCustomRestClient.put(productEntity).subscribe(

@@ -1,11 +1,11 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
 import { AuthenticationManager } from '../authentication/authentication.manager';
 import { environment } from '../../../environments/environment';
-import { EntityInterface } from '../../models';
+import { EntityInterface, PaginatorInterface } from '../../models';
 
 @Injectable()
 export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
@@ -17,8 +17,8 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
         this.baseUrl = environment.baseUrl;
     }
 
-    public query(): Observable<Entity[]> {
-        return this.httpClient.get<Entity[]>(
+    public query(): Observable<PaginatorInterface<Entity>> {
+        return this.httpClient.get<PaginatorInterface<Entity>>(
             this.getUrl(),
             {headers: this.getHeaders()}
         );
@@ -41,7 +41,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
 
     public put(entity: Entity) {
         return this.httpClient.put<Entity>(
-            this.getUrl() + '/' + entity.id,
+            this.getUrl() + '/' + entity._id,
             entity,
             {headers: this.getHeaders()}
         );
@@ -49,7 +49,7 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
 
     public patch(entity: PartialEntity) {
         return this.httpClient.patch<Entity>(
-            this.getUrl() + '/' + entity.id,
+            this.getUrl() + '/' + entity._id,
             entity,
             {headers: this.getHeaders()}
         );
@@ -67,9 +67,6 @@ export abstract class AbstractCustomRestClient<Entity extends EntityInterface,
     }
 
     protected getHeaders(): HttpHeaders {
-        let headers = new HttpHeaders();
-        headers.set('authorization', this.authenticationManager.getToken());
-
-        return headers;
+        return new HttpHeaders({authorization: this.authenticationManager.getToken()});
     }
 }

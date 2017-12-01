@@ -1,3 +1,3 @@
 export interface EntityInterface {
-    id: string;
+    _id: string;
 }

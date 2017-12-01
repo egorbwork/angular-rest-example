@@ -38,7 +38,6 @@ import { RestHandler } from 'rest-core';
 // Components
 import { BaseComponent } from './components/base.component';
 import { ProductListComponent } from './components/products/product-list.component';
-import { EditProductComponent } from './components/products/edit-product.component';
 
 // Services
 import { AuthenticationManager } from './services/authentication/authentication.manager';
@@ -70,7 +69,6 @@ export function localHandlerFactory(http: HttpClient) {
   declarations: [
     BaseComponent,
     ProductListComponent,
-    EditProductComponent,
     AppComponent,
     AboutComponent,
     HomeComponent,

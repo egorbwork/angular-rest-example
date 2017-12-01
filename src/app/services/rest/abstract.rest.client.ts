@@ -1,4 +1,4 @@
-import { IRestMethod, Rest, RestAction, RestParams, RestRequestMethod } from 'rest-core';
+import { IRestMethod, Rest, RestAction, RestRequestMethod } from 'rest-core';
 import { IRestActionInner, IRestResponse } from 'rest-core/src/Declarations';
 import { RestHandler } from 'rest-core/src/RestHandler';
 
@@ -63,11 +63,10 @@ export class AbstractRestClient<Entity, PartialEntity> extends Rest {
         if (error && error.hasOwnProperty('error') && error.hasOwnProperty('code')) {
             throw error;
         } else {
-            let customError: ApiError = {
+            throw {
                 code: 'unknown.server.error',
                 error: 'Unknown server error!'
             };
-            throw customError;
         }
     }
 }

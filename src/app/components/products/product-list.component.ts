@@ -25,7 +25,7 @@ export class ProductListComponent implements OnInit {
                 (paginator: PaginatorInterface<ProductInterface>) => {
                     this.products = paginator.items;
                 },
-                (error) => alert(error.error),
+                (error) => this.areProductsLoading = false,
                 () => this.areProductsLoading = false
             );
         } else {
@@ -40,10 +40,6 @@ export class ProductListComponent implements OnInit {
                 }
             );
         }
-    }
-
-    public edit(product: ProductInterface): void {
-        console.log(product);
     }
 
     public update(product: ProductInterface): void {
